@@ -1,12 +1,15 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
+const userRouter = require("./routes/user");
 
 const app = express();
 const port = 3000;
 
-app.get('/', (req,res) => {
-  res.send("qqafhasfh");
-})
+app.use(bodyParser.json());
 
-app.listen(port, ()=>{
-  console.log(`server start at localhost:${port}`);
-})
+app.use("/user", userRouter)
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
