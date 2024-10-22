@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://dipankar:dipankar2002@cluster0.ggoivze.mongodb.net/Todo_with_MERN");
+mongoose.connect("mongodb+srv://dip:dip2002@cluster0.y04du.mongodb.net/");
 
 const userDb = mongoose.model('user',{
   name: {
