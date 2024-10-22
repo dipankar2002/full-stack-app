@@ -6,14 +6,14 @@ function userMiddleware(req, res, next) {
   const authentication = req.headers.authorization;
   if (authentication) {
     const token = authentication.split(" ")[1];
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-      if (err) return res.sendStatus(403);
-
-      req.user = user;
+    const decodedValue = jwt.verify(token, JWT_SECRET);
+    if (decodedValue.username) {
       next();
-    });
-  } else {
-    res.status(401).json({ msg: "Authorization Header missing" });
+    } else {
+      res.status(401).json({
+        message: "Authorization Header missing",
+      });
+    }
   }
 }
 
