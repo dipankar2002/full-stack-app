@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://dip:dip2002@cluster0.y04du.mongodb.net/");
+mongoose.connect("mongodb+srv://dip:dip2002@cluster0.y04du.mongodb.net/full-stack-todo");
 
 const userDb = mongoose.model('user',{
   name: {
