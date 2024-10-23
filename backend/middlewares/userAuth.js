@@ -7,7 +7,8 @@ function userMiddleware(req, res, next) {
   if (authentication) {
     const token = authentication.split(" ")[1];
     const decodedValue = jwt.verify(token, SECRET_KEY);
-    if (decodedValue.username) {
+    
+    if (decodedValue.email) {
       next();
     } else {
       res.status(401).json({
