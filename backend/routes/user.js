@@ -28,7 +28,7 @@ router.post("/createTodo", async (req, res) => {
       email: req.headers.email,
     });
 
-    user.todo.push({
+    await user.todo.push({
       id: todoBody.id,
       title: todoBody.title,
       description: todoBody.description,
