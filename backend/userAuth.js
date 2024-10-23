@@ -1,12 +1,12 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = require('./impDocs/jwt_key');
 
 function userMiddleware(req, res, next) {
   const authentication = req.headers.authorization;
   if (authentication) {
     const token = authentication.split(" ")[1];
-    const decodedValue = jwt.verify(token, JWT_SECRET);
+    const decodedValue = jwt.verify(token, SECRET_KEY);
     if (decodedValue.username) {
       next();
     } else {
