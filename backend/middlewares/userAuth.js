@@ -1,6 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = require('./impDocs/jwt_key');
+const SECRET_KEY = require('../impDocs/jwt_key');
 
 function userMiddleware(req, res, next) {
   const authentication = req.headers.authorization;
