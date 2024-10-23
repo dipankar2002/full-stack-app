@@ -7,15 +7,37 @@ const { createTodo } = require("../zod/type");
 const userMiddleware = require("../middlewares/userAuth");
 const crypto = require("crypto");
 
-router.post("/seeTodo", async (req, res) => {});
+router.put("/updateTodo", async (req,res) => {
 
-router.post("/createTodo", async (req, res) => {
+})
+
+router.post("/homePage", userMiddleware, async (req, res) => {
+  const email = req.headers.email;
+
+  const user = await userDb.findOne({
+    email: email,
+  });
+
+  if(!user) {
+    return res.json({ mes: "user not found. Try login again" });
+  }
+
+  console.log(user);
+  
+  return res.json(user.todo);
+});
+
+router.post("/createTodo", userMiddleware, async (req, res) => {
   try {
     const todoBody = req.body;
     todoBody.id = crypto.randomBytes(16).toString("hex");
     todoBody.date = new Date();
     todoBody.status = false;
     const parsedBody = createTodo.safeParse(todoBody);
+    const authentication = req.headers.authorization;
+
+    const token = authentication.split(" ")[1];
+    const decodedValue = jwt.verify(token, SECRET_KEY);
 
     if (!parsedBody.success) {
       res.status(422).json({
@@ -25,8 +47,12 @@ router.post("/createTodo", async (req, res) => {
     }
 
     const user = await userDb.findOne({
-      email: req.headers.email,
+      email: decodedValue.email,
     });
+
+    if(!user) {
+      return res.json({ mes: "user not found" });
+    }
 
     await user.todo.push({
       id: todoBody.id,
