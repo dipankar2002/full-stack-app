@@ -9,6 +9,7 @@ function userMiddleware(req, res, next) {
     const decodedValue = jwt.verify(token, SECRET_KEY);
     
     if (decodedValue.email) {
+      req.email = decodedValue.email;
       next();
     } else {
       res.status(401).json({
