@@ -12,10 +12,9 @@ router.put("/updateTodo", async (req,res) => {
 })
 
 router.post("/homePage", userMiddleware, async (req, res) => {
-  const email = req.headers.email;
 
   const user = await userDb.findOne({
-    email: email,
+    email: req.email,
   });
 
   if(!user) {
@@ -33,21 +32,22 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
     todoBody.id = crypto.randomBytes(16).toString("hex");
     todoBody.date = new Date();
     todoBody.status = false;
-    const parsedBody = createTodo.safeParse(todoBody);
-    const authentication = req.headers.authorization;
+    // const parsedBody = createTodo.safeParse(todoBody);
+    // const authentication = req.headers.authorization;
 
-    const token = authentication.split(" ")[1];
-    const decodedValue = jwt.verify(token, SECRET_KEY);
+    // const token = authentication.split(" ")[1];
+    // const decodedValue = jwt.verify(token, SECRET_KEY);
 
-    if (!parsedBody.success) {
+    if (!req.email) {
       res.status(422).json({
         message: "Containes invalid or unacceptable data",
       });
       return;
     }
-
+    console.log(req.email);
+    
     const user = await userDb.findOne({
-      email: decodedValue.email,
+      email: req.email,
     });
 
     if(!user) {
