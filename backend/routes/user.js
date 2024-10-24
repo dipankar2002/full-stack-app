@@ -22,7 +22,7 @@ router.post("/homePage", userMiddleware, async (req, res) => {
   }
 
   console.log(user);
-  
+
   return res.json(user.todo);
 });
 
@@ -32,11 +32,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
     todoBody.id = crypto.randomBytes(16).toString("hex");
     todoBody.date = new Date();
     todoBody.status = false;
-<<<<<<< HEAD
-    // const parsedBody = createTodo.safeParse(todoBody);
-=======
     const parsedBody = createTodo.safeParse(todoBody);
->>>>>>> 4395465483951509eb9abfb1bd6888177ce46127
     // const authentication = req.headers.authorization;
 
     // const token = authentication.split(" ")[1];
@@ -49,7 +45,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
       return;
     }
     console.log(req.email);
-    
+
     const user = await userDb.findOne({
       email: req.email,
     });
