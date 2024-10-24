@@ -32,7 +32,11 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
     todoBody.id = crypto.randomBytes(16).toString("hex");
     todoBody.date = new Date();
     todoBody.status = false;
+<<<<<<< HEAD
     // const parsedBody = createTodo.safeParse(todoBody);
+=======
+    const parsedBody = createTodo.safeParse(todoBody);
+>>>>>>> 4395465483951509eb9abfb1bd6888177ce46127
     // const authentication = req.headers.authorization;
 
     // const token = authentication.split(" ")[1];
