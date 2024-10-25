@@ -6,18 +6,16 @@ const { userDb } = require("../db/accountDB");
 const { createTodo } = require("../zod/type");
 const userMiddleware = require("../middlewares/userAuth");
 const crypto = require("crypto");
+const { hashPassword, comparePassword } = require("../middlewares/hash");
 
-router.put("/updateTodo", async (req,res) => {
-
-})
+router.put("/updateTodo", async (req, res) => {});
 
 router.post("/homePage", userMiddleware, async (req, res) => {
-
   const user = await userDb.findOne({
     email: req.email,
   });
 
-  if(!user) {
+  if (!user) {
     return res.json({ mes: "user not found. Try login again" });
   }
 
@@ -50,7 +48,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
       email: req.email,
     });
 
-    if(!user) {
+    if (!user) {
       return res.json({ mes: "user not found" });
     }
 
@@ -77,20 +75,33 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
 
-  const findUser = await userDb.findOne({
-    email: email,
-    password: password,
-  });
+    const findUser = await userDb.findOne({
+      email: email,
+    });
 
-  if (findUser) {
-    const token = jwt.sign({ email: email }, SECRET_KEY);
-    res.status(200).json({ jwt: token });
-    return;
+    if (!findUser) {
+      res.json({
+        message: "User does not exists",
+      });
+    }
+    const isMatch = await comparePassword(password, findUser.password);
+
+    if (isMatch) {
+      const token = jwt.sign({ email: email }, SECRET_KEY);
+      res.status(200).json({ jwt: token });
+      return;
+    }
+    res.json({ mes: "user not found create account" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Something went wrong",
+    });
   }
-  res.json({ mes: "user not found create account" });
 });
 
 router.post("/signup", async (req, res) => {
@@ -98,21 +109,30 @@ router.post("/signup", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const findUser = await userDb.findOne({
-    email: email,
-    password: password,
-  });
+  try {
+    const findUser = await userDb.findOne({
+      email: email,
+      password: password,
+    });
 
-  if (findUser) {
-    res.json({ mes: "user found create a new one" });
-    return;
+    if (findUser) {
+      res.json({ mes: "User already exists" });
+      return;
+    }
+    const hashedPassword = await hashPassword(password);
+
+    await userDb.create({
+      name: name,
+      email: email,
+      password: hashedPassword,
+    });
+    res.json({ mes: "user account created" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Something went wrong",
+    });
   }
-  await userDb.create({
-    name: name,
-    email: email,
-    password: password,
-  });
-  res.json({ mes: "user account created" });
 });
 
 module.exports = router;
