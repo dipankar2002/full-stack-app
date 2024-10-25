@@ -31,10 +31,11 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
     todoBody.date = new Date();
     todoBody.status = false;
     const parsedBody = createTodo.safeParse(todoBody);
-    // const authentication = req.headers.authorization;
-
-    // const token = authentication.split(" ")[1];
-    // const decodedValue = jwt.verify(token, SECRET_KEY);
+    if (!parsedBody.success) {
+      return res.status(411).json({
+        message: "Wrong inputs",
+      });
+    }
 
     if (!req.email) {
       res.status(422).json({
