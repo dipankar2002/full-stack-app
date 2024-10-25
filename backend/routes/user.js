@@ -6,18 +6,16 @@ const { userDb } = require("../db/accountDB");
 const { createTodo } = require("../zod/type");
 const userMiddleware = require("../middlewares/userAuth");
 const crypto = require("crypto");
+const { hashPassword, comparePassword } = require("../middlewares/hash");
 
-router.put("/updateTodo", async (req,res) => {
-
-})
+router.put("/updateTodo", async (req, res) => {});
 
 router.post("/homePage", userMiddleware, async (req, res) => {
-
   const user = await userDb.findOne({
     email: req.email,
   });
 
-  if(!user) {
+  if (!user) {
     return res.json({ mes: "user not found. Try login again" });
   }
 
@@ -33,10 +31,11 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
     todoBody.date = new Date();
     todoBody.status = false;
     const parsedBody = createTodo.safeParse(todoBody);
-    // const authentication = req.headers.authorization;
-
-    // const token = authentication.split(" ")[1];
-    // const decodedValue = jwt.verify(token, SECRET_KEY);
+    if (!parsedBody.success) {
+      return res.status(411).json({
+        message: "Wrong inputs",
+      });
+    }
 
     if (!req.email) {
       res.status(422).json({
@@ -50,7 +49,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
       email: req.email,
     });
 
-    if(!user) {
+    if (!user) {
       return res.json({ mes: "user not found" });
     }
 
@@ -77,20 +76,37 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
 
-  const findUser = await userDb.findOne({
-    email: email,
-    password: password,
-  });
+    const findUser = await userDb.findOne({
+      email: email,
+    });
 
-  if (findUser) {
-    const token = jwt.sign({ email: email }, SECRET_KEY);
-    res.status(200).json({ jwt: token });
-    return;
+    if (!findUser) {
+      return res.json({
+        message: "User does not exists",
+      });
+    }
+    const isMatch = await comparePassword(password, findUser.password);
+    if (!isMatch) {
+      return res.json({
+        message: "Wrong Password",
+      });
+    }
+
+    if (isMatch) {
+      const token = jwt.sign({ email: email }, SECRET_KEY);
+      return res.status(200).json({ jwt: token });
+    }
+    res.json({ mes: "user not found create account" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
   }
-  res.json({ mes: "user not found create account" });
 });
 
 router.post("/signup", async (req, res) => {
@@ -98,21 +114,29 @@ router.post("/signup", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const findUser = await userDb.findOne({
-    email: email,
-    password: password,
-  });
+  try {
+    const findUser = await userDb.findOne({
+      email: email,
+    });
 
-  if (findUser) {
-    res.json({ mes: "user found create a new one" });
-    return;
+    if (findUser) {
+      res.status(409).json({ mes: "User already exists" });
+      return;
+    }
+    const hashedPassword = await hashPassword(password);
+
+    await userDb.create({
+      name: name,
+      email: email,
+      password: hashedPassword,
+    });
+    res.json({ mes: "user account created" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Something went wrong",
+    });
   }
-  await userDb.create({
-    name: name,
-    email: email,
-    password: password,
-  });
-  res.json({ mes: "user account created" });
 });
 
 module.exports = router;
