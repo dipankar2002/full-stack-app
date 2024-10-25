@@ -88,7 +88,6 @@ router.post("/login", async (req, res) => {
       return res.json({
         message: "User does not exists",
       });
-      return;
     }
     const isMatch = await comparePassword(password, findUser.password);
     if (!isMatch) {
