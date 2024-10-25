@@ -84,21 +84,26 @@ router.post("/login", async (req, res) => {
     });
 
     if (!findUser) {
-      res.json({
+      return res.json({
         message: "User does not exists",
       });
+      return;
     }
     const isMatch = await comparePassword(password, findUser.password);
+    if (!isMatch) {
+      return res.json({
+        message: "Wrong Password",
+      });
+    }
 
     if (isMatch) {
       const token = jwt.sign({ email: email }, SECRET_KEY);
-      res.status(200).json({ jwt: token });
-      return;
+      return res.status(200).json({ jwt: token });
     }
     res.json({ mes: "user not found create account" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Something went wrong",
     });
   }
@@ -112,11 +117,10 @@ router.post("/signup", async (req, res) => {
   try {
     const findUser = await userDb.findOne({
       email: email,
-      password: password,
     });
 
     if (findUser) {
-      res.json({ mes: "User already exists" });
+      res.status(409).json({ mes: "User already exists" });
       return;
     }
     const hashedPassword = await hashPassword(password);
