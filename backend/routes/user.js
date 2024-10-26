@@ -8,7 +8,45 @@ const userMiddleware = require("../middlewares/userAuth");
 const crypto = require("crypto");
 const { hashPassword, comparePassword } = require("../middlewares/hash");
 
-router.put("/updateTodo", async (req, res) => {});
+router.put("/updateTodo/:id", userMiddleware, async (req, res) => {
+  try {
+    const todoId = req.params.id;
+    const updatedTodo = req.body;
+
+    // const parsedBody = createTodo.safeParse(updatedTodo);
+    // if (!parsedBody.success) {
+    //   return res.status(411).json({
+    //     message: "Wrong inputs",
+    //   });
+    // }
+
+    const user = await userDb.findOne({
+      email: req.email,
+    });
+
+    const todo = user.todo.find((item) => item.id === todoId);
+    if (!todo) {
+      return res.status(404).json({
+        message: "Todo not found",
+      });
+    }
+    todo.tag = updatedTodo.tag;
+    todo.title = updatedTodo.title;
+    todo.description = updatedTodo.description;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Todo updated",
+      todo: user.todo,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
 
 router.post("/homePage", userMiddleware, async (req, res) => {
   const user = await userDb.findOne({
@@ -26,28 +64,35 @@ router.post("/homePage", userMiddleware, async (req, res) => {
 
 router.post("/createTodo", userMiddleware, async (req, res) => {
   try {
+    // console.log("hello");
     const todoBody = req.body;
     todoBody.id = crypto.randomBytes(16).toString("hex");
     todoBody.date = new Date();
     todoBody.status = false;
     const parsedBody = createTodo.safeParse(todoBody);
+
+    // const email = req.headers.email;
+    // console.log("hello");
+
     if (!parsedBody.success) {
       return res.status(411).json({
         message: "Wrong inputs",
       });
     }
 
-    if (!req.email) {
-      res.status(422).json({
-        message: "Containes invalid or unacceptable data",
-      });
-      return;
-    }
-    console.log(req.email);
+
+    // if (!req.email) {
+    //   res.status(422).json({
+    //     message: "Containes invalid or unacceptable data",
+    //   });
+    //   return;
+    // }
+    // console.log(req.email);
 
     const user = await userDb.findOne({
       email: req.email,
     });
+    // console.log(user);
 
     if (!user) {
       return res.json({ mes: "user not found" });
@@ -66,7 +111,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
 
     return res.status(200).json({
       message: "Todo added",
-      todo: user.todo,
+    //   todo: user.todo,
     });
   } catch (error) {
     console.error(error);
