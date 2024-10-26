@@ -55,6 +55,7 @@ router.post("/createTodo", userMiddleware, async (req, res) => {
 
     await user.todo.push({
       id: todoBody.id,
+      tag: todoBody.tag,
       title: todoBody.title,
       description: todoBody.description,
       status: todoBody.status,

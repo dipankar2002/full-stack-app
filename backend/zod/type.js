@@ -2,10 +2,12 @@ const zod = require('zod');
 
 const createTodo = zod.object({
   id: zod.string(),
+  tag : zod.string(),
   title: zod.string(),
   description: zod.string(),
   status: zod.boolean(),
   date: zod.date(),
+
 });
 
 const createUser = zod.object({
