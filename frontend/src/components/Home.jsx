@@ -83,7 +83,7 @@ function Header({day,account}) {
 }
 
 function MainSec() {
-  return <div className="bg-gray-500 bg-opacity-30 rounded-[20px] h-[100%] py-2 hide-scrollbar overflow-auto">
+  return <div className="bg-gray-500 bg-opacity-30 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
     <Tasks title={"Valo"} description={"play valorant at noon 2pm"} tag={"game"} date={"26-10-24"}/>
     <Tasks title={"Gym"} description={"go to gym at 5pm"} tag={"gym"} date={"26-10-24"}/>
     <Tasks title={"code"} description={"finish home page code before 12pm"} tag={"gym"} date={"26-10-24"}/>
