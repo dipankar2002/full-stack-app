@@ -2,6 +2,90 @@ import React from "react";
 import { useState } from "react";
 import Tasks from "./Tasks";
 
+const todoObj = [
+  {
+      id: 1,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: false,
+      date: "2024-10-27T10:08:14.700Z",
+      _id: "671e110eda81d41630be5846"
+  },
+  {
+      id: 2,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: false,
+      date: "2024-10-27T10:08:16.397Z",
+      _id: "671e1110da81d41630be584a"
+  },
+  {
+      id: 3,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: true,
+      date: "2024-10-27T10:08:17.304Z",
+      _id: "671e1111da81d41630be584f"
+  },
+  {
+      id: 4,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: false,
+      date: "2024-10-27T10:08:18.163Z",
+      _id: "671e1112da81d41630be5855"
+  },
+  {
+      id: 5,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: true,
+      date: "2024-10-27T10:08:19.039Z",
+      _id: "671e1113da81d41630be585c"
+  },
+  {
+      id: 6,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: false,
+      date: "2024-10-27T10:08:19.802Z",
+      _id: "671e1113da81d41630be5864"
+  },
+  {
+      id: 7,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: true,
+      date: "2024-10-27T10:08:20.672Z",
+      _id: "671e1114da81d41630be586d"
+  },
+  {
+      id: 8,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: false,
+      date: "2024-10-27T10:08:21.482Z",
+      _id: "671e1115da81d41630be5877"
+  },
+  {
+      id: 9,
+      tag: "project",
+      title: "full stack todo",
+      description: "comple code for the project",
+      status: true,
+      date: "2024-10-27T10:08:22.273Z",
+      _id: "671e1116da81d41630be5882"
+  }
+]
+
 export default function Home() {
   return (
     <div className="flex">
@@ -13,8 +97,8 @@ export default function Home() {
 
 // ----------------- Left Sec part code ----------------- //
 function LeftSec() {
-  return <div className="w-[20%] h-[95vh] m-3 flex flex-col justify-between">
-    <div className="bg-gray-500 bg-opacity-30 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
+  return <div className="w-[15%] h-[95vh] m-3 flex flex-col justify-between">
+    <div className="bg-gray-500 bg-opacity-10 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
       <Top />
       <MidCards title={"TASKS"} innerText={{l1:"Today",l2:"Upcoming",l3:"Calender"}} dateTag={true}/>
       <MidCards title={"TAGS"} innerText={{l1:"Personal",l2:"Workout",l3:"Home"}} dateTag={false}/>
@@ -68,7 +152,7 @@ function BottomBtns() {
 
 // ----------------- Right Sec part code ----------------- //
 function RightSec() {
-  return <div className=" w-[78%] h-[95vh] py-5 m-3 rounded-[20px] overflow-hidden">
+  return <div className=" w-[78%] h-[97vh] m-3 mx-auto rounded-[20px] overflow-hidden">
     <Header day={"TODAY"} account={"DG"}/>
     <MainSec />
     <CreateTodo />
@@ -76,30 +160,46 @@ function RightSec() {
 }
 
 function Header({day,account}) {
-  return <div className="flex justify-between items-center mx-auto mb-4 w-[90%]">
+  return <div className="flex justify-between items-center mx-auto mt-0 mb-4 w-[90%]">
     <p className="text-white font-bold text-[200%] tracking-widest ">{day}</p>
     <div className="bg-white w-[60px] h-[60px] flex justify-center items-center text-[200%] font-bold rounded-[50%]">{account}</div>
   </div>
 }
 
 function MainSec() {
-  return <div className="bg-gray-500 bg-opacity-30 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
-    <Tasks title={"Valo"} description={"play valorant at noon 2pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"Gym"} description={"go to gym at 5pm"} tag={"gym"} date={"26-10-24"}/>
-    <Tasks title={"code"} description={"finish home page code before 12pm"} tag={"gym"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    <Tasks title={"project"} description={"go to gym at 5pm"} tag={"game"} date={"26-10-24"}/>
-    
+
+  const [isOpenPendingTasks, setIsOpenPendingTasks] = useState(true);
+  const [isOpenCompleteTasks, setIsOpenCompleteTasks] = useState(false);
+
+  const toggleDropdownPendingTasks = () => {
+    setIsOpenPendingTasks(!isOpenPendingTasks);
+  };
+  
+  const toggleDropdownCompleteTasks = () => {
+    setIsOpenCompleteTasks(!isOpenCompleteTasks);
+  };
+
+  return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
+    <button onClick={toggleDropdownPendingTasks} className=" w-[90%] mx-auto text-[150%] font-medium text-white flex">Panding Tasks {isOpenPendingTasks?"▲":"▼"}
+    </button>
+
+    {isOpenPendingTasks?<div>
+      {todoObj.map((value)=>{
+        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+      })}
+    </div>:null}
+
+    <button onClick={toggleDropdownCompleteTasks} className=" w-[90%] mx-auto my-5 text-[150%] font-medium text-white flex">Completed Tasks {isOpenCompleteTasks?"▲":"▼"}
+    </button>
+
+    {isOpenCompleteTasks?<div>
+      {todoObj.map((value)=>{
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+      })}
+    </div>:null}
   </div>
 }
 
 function CreateTodo() {
-  return <button className="fixed bottom-10 right-10 flex bg-blue-400 px-6 py-2 mx-auto rounded-[15px] text-[190%] font-bold z-1">Create</button>
+  return <button className="fixed bottom-10 right-20 flex bg-blue-400 px-6 py-2 mx-auto rounded-[15px] text-[190%] font-bold z-1">Create</button>
 }
