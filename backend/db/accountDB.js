@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 
-// mongoose.connect(
-//   "mongodb+srv://dip:dip2002@cluster0.y04du.mongodb.net/full-stack-todo"
-// );
+
 
 mongoose.connect(
-  "mongodb+srv://ankanbiswas365:ankanbiswas365@cluster0.y04du.mongodb.net/full-stack-todo"
+  process.env.MONGODB_URL
 );
 
 const todoSchema = new mongoose.Schema({

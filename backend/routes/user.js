@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = require("../impDocs/jwt_key");
 const { userDb } = require("../db/accountDB");
 const { createTodo } = require("../zod/type");
 const userMiddleware = require("../middlewares/userAuth");
@@ -143,7 +142,7 @@ router.post("/login", async (req, res) => {
     }
 
     if (isMatch) {
-      const token = jwt.sign({ email: email }, SECRET_KEY);
+      const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
       return res.status(200).json({ jwt: token });
     }
     res.json({ mes: "user not found create account" });

@@ -1,6 +1,6 @@
-require("dotenv").config();
+// require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = require("../impDocs/jwt_key");
+// const SECRET_KEY = require("../impDocs/jwt_key");
 
 function userMiddleware(req, res, next) {
   const authentication = req.headers.authorization;
@@ -14,7 +14,7 @@ function userMiddleware(req, res, next) {
   const token = authentication.split(" ")[1];
 
   try {
-    const decodedValue = jwt.verify(token, SECRET_KEY);
+    const decodedValue = jwt.verify(token, process.env.SECRET_KEY);
     if (decodedValue.email) {
       req.email = decodedValue.email;
       next();
@@ -26,8 +26,8 @@ function userMiddleware(req, res, next) {
   } catch (error) {
     console.error(error);
     return res.status(401).json({
-        message : "Invalid or expired token",
-    })
+      message: "Invalid or expired token",
+    });
   }
 }
 
