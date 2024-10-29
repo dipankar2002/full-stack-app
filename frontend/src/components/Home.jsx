@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import Tasks from "./Tasks";
+import CreateTodoCard from "./CreateTodoCard";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+import { createTodoCard } from "../atoms/atom";
 
 const todoObj = [
   {
@@ -89,14 +92,17 @@ const todoObj = [
 export default function Home() {
   return (
     <div className="flex">
-      <LeftSec />
-      <RightSec />
+      <RecoilRoot>
+        <LeftSec />
+        <RightSec />
+      </RecoilRoot>
     </div>
   );
 }
 
 // ----------------- Left Sec part code ----------------- //
 function LeftSec() {
+  const isOpencreateTodoCard = useRecoilValue(createTodoCard);
   return <div className="w-[15%] h-[95vh] m-3 flex flex-col justify-between">
     <div className="bg-gray-500 bg-opacity-10 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
       <Top />
@@ -104,6 +110,9 @@ function LeftSec() {
       <MidCards title={"TAGS"} innerText={{l1:"Personal",l2:"Workout",l3:"Home"}} dateTag={false}/>
     </div>
     <BottomBtns/>
+    {isOpencreateTodoCard && (
+      <CreateTodoCard/>
+    )}
   </div>
 }
 
@@ -146,7 +155,7 @@ function MidInfoCard({innerText, dateTag}) {
 function BottomBtns() {
   return <div className="flex justify-around items-center my-2 mx-2">
     <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Log Out</button>
-    <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Setting</button>
+    <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Settings</button>
   </div>
 }
 
@@ -155,7 +164,7 @@ function RightSec() {
   return <div className=" w-[78%] h-[97vh] m-3 mx-auto rounded-[20px] overflow-hidden">
     <Header day={"TODAY"} account={"DG"}/>
     <MainSec />
-    <CreateTodo />
+    <CreateTodoBtn/>
   </div>
 }
 
@@ -180,7 +189,7 @@ function MainSec() {
   };
 
   return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
-    <button onClick={toggleDropdownPendingTasks} className=" w-[90%] mx-auto text-[150%] font-medium text-white flex">Panding Tasks {isOpenPendingTasks?"▲":"▼"}
+    <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Panding Tasks {isOpenPendingTasks?"▲":"▼"}
     </button>
 
     {isOpenPendingTasks?<div>
@@ -189,7 +198,7 @@ function MainSec() {
       })}
     </div>:null}
 
-    <button onClick={toggleDropdownCompleteTasks} className=" w-[90%] mx-auto my-5 text-[150%] font-medium text-white flex">Completed Tasks {isOpenCompleteTasks?"▲":"▼"}
+    <button onClick={toggleDropdownCompleteTasks} className="w-[90%] mx-auto my-5 text-[150%] font-medium text-white flex">Completed Tasks {isOpenCompleteTasks?"▲":"▼"}
     </button>
 
     {isOpenCompleteTasks?<div>
@@ -200,6 +209,9 @@ function MainSec() {
   </div>
 }
 
-function CreateTodo() {
-  return <button className="fixed bottom-10 right-20 flex bg-blue-400 px-6 py-2 mx-auto rounded-[15px] text-[190%] font-bold z-1">Create</button>
+function CreateTodoBtn() {
+  const [ isOpencreateTodoCard, setIsOpencreateTodoCard ] = useRecoilState(createTodoCard);
+  return <button onClick={()=>{
+    setIsOpencreateTodoCard(!isOpencreateTodoCard);
+  }} className="fixed bottom-10 right-20 flex bg-blue-400 px-6 pb-2 mx-auto rounded-[15px] text-[190%] font-bold z-20">{!isOpencreateTodoCard?"create":"close"}</button>
 }
