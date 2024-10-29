@@ -114,7 +114,7 @@ function Top() {
       <button className="text-white font-bold text-[200%] tracking-widest">=</button>
     </div>
     <input className="bg-white bg-opacity-50 rounded-[20px] mb-4 px-5 pb-1.3 w-[90%] h-[35px] mx-auto text-white placeholder-black text-[120%] font-medium"
-      type="text" 
+      type="text"
       placeholder="SEARCH"/>
   </div>
 }
@@ -174,7 +174,7 @@ function MainSec() {
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
   };
-  
+
   const toggleDropdownCompleteTasks = () => {
     setIsOpenCompleteTasks(!isOpenCompleteTasks);
   };
