@@ -1,20 +1,32 @@
-// import react from "react";
+import react from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUpForm ()  {
-  const [ name, setName] = useState("");
-  const [ email, setEmail] = useState("");
-  const [ password, setPassword] = useState("");
-async function signupBtn(e) {
+  const navigate = useNavigate();
+  const [ name, setName ] = useState("");
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ message, setMessage ] = useState("");
+
+  async function signupBtn(e) {
     e.preventDefault();
-    const response = await fetch('/api/signup', {
+    const response = await fetch('http://localhost:3000/user/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        
+        name: name,
+        email: email,
+        password: password
       })
-  });
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.success) {
+      navigate("/login");
+    } else {
+      setMessage(data.message);
+    }
   }
   return (
     <form onSubmit={signupBtn}>
@@ -29,7 +41,7 @@ async function signupBtn(e) {
                 Name
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
+                className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="username"
                 type="text"
                 value={name} onChange={(e)=>{setName(e.target.value)}}
@@ -40,7 +52,7 @@ async function signupBtn(e) {
                 Email
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
+                className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="password"
                 type="email"
                 value={email} onChange={(e)=>{setEmail(e.target.value)}}
@@ -51,7 +63,7 @@ async function signupBtn(e) {
                 Password
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
+                className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="confirmPassword"
                 type="password"
                 value={password} onChange={(e)=>{setPassword(e.target.value)}}
@@ -73,6 +85,7 @@ async function signupBtn(e) {
                 Log In
               </Link>
             </p>
+            <p className="text-white md:text-[20px] flex justify-center font-sans text-sm font-light leading-normal text-inherit antialiased">{message}</p>
           </div>
         </div>
       </div>
