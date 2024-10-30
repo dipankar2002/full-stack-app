@@ -1,9 +1,20 @@
 // import react from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function SignUpForm ()  {
-  function signupBtn(e) {
+  const [ name, setName] = useState("");
+  const [ email, setEmail] = useState("");
+  const [ password, setPassword] = useState("");
+async function signupBtn(e) {
     e.preventDefault();
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        
+      })
+  });
   }
   return (
     <form onSubmit={signupBtn}>
@@ -21,6 +32,7 @@ export default function SignUpForm ()  {
                 className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="username"
                 type="text"
+                value={name} onChange={(e)=>{setName(e.target.value)}}
               />
             </div>
             <div className="flex justify-around">
@@ -31,6 +43,7 @@ export default function SignUpForm ()  {
                 className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="password"
                 type="email"
+                value={email} onChange={(e)=>{setEmail(e.target.value)}}
               />
             </div>
             <div className="flex justify-around">
@@ -41,6 +54,7 @@ export default function SignUpForm ()  {
                 className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="confirmPassword"
                 type="password"
+                value={password} onChange={(e)=>{setPassword(e.target.value)}}
               />
             </div>
 
