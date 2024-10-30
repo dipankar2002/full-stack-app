@@ -7,6 +7,57 @@ const userMiddleware = require("../middlewares/userAuth");
 const crypto = require("crypto");
 const { hashPassword, comparePassword } = require("../middlewares/hash");
 
+router.delete("/deleteTodo/:id", userMiddleware, async (req, res) => {
+  try {
+    const todoId = req.params.id;
+    const user = await userDb.findOne({
+      email: req.email,
+    });
+    const todoIndex = user.todo.findIndex((item) => item.id === todoId);
+    if (todoIndex === -1) {
+      return res.status(404).json({
+        message: "Todo not found",
+      });
+    }
+    user.todo.splice(todoIndex, 1);
+    await user.save();
+    return res.status(200).json({
+      message: "Todo deleted",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
+
+router.put("/changeStatus/:id", userMiddleware, async (req, res) => {
+  try {
+    const todoId = req.params.id;
+
+    const user = await userDb.findOne({
+      email: req.email,
+    });
+    const todo = user.todo.find((item) => item.id === todoId);
+    if (!todo) {
+      return res.status(404).json({
+        message: "Todo not found",
+      });
+    }
+    todo.status = !todo.status;
+    await user.save();
+    return res.status(200).json({
+      message: "status changed",
+      todo: user.todo,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
+
 router.put("/updateTodo/:id", userMiddleware, async (req, res) => {
   try {
     const todoId = req.params.id;
@@ -40,7 +91,7 @@ router.put("/updateTodo/:id", userMiddleware, async (req, res) => {
   }
 });
 
-router.post("/homePage", userMiddleware, async (req, res) => {
+router.get("/homePage", userMiddleware, async (req, res) => {
   const user = await userDb.findOne({
     email: req.email,
   });
