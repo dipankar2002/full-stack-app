@@ -1,9 +1,31 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LogInForm() {
-  function loginBtn(e) {
+  const navigate = useNavigate();
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ message, setMessage ] = useState("");
+  async function loginBtn(e) {
     e.preventDefault();
+    const response = await fetch('http://localhost:3000/user/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if(data.success) {
+      const token = data.jwt;
+      localStorage.setItem('authToken', token);
+      navigate("/");
+    } else {
+      setMessage(data.message);
+    }
   }
   return (
     <form onSubmit={loginBtn}>
@@ -21,6 +43,7 @@ export default function LogInForm() {
                 className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="password"
                 type="email"
+                value={email} onChange={(e)=>{setEmail(e.target.value)}}
               />
             </div>
             <div className="flex justify-around">
@@ -28,9 +51,10 @@ export default function LogInForm() {
                 Password
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
+                className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="confirmPassword"
                 type="password"
+                value={password} onChange={(e)=>{setPassword(e.target.value)}}
               />
             </div>
 
@@ -49,6 +73,7 @@ export default function LogInForm() {
                 Sign up
               </Link>
             </p>
+            <p className="text-white md:text-[20px] flex justify-center font-sans text-sm font-light leading-normal text-inherit antialiased">{message}</p>
           </div>
         </div>
       </div>
