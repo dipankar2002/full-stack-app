@@ -97,7 +97,7 @@ router.get("/homePage", userMiddleware, async (req, res) => {
   });
 
   if (!user) {
-    return res.json({ mes: "user not found. Try login again" });
+    return res.json({ message: "user not found. Try login again", success: false });
   }
 
   console.log(user);
@@ -159,27 +159,21 @@ router.post("/login", async (req, res) => {
     });
 
     if (!findUser) {
-      return res.json({
-        message: "User does not exists",
-      });
+      return res.json({ message: "User does not exists", success: false });
     }
     const isMatch = await comparePassword(password, findUser.password);
     if (!isMatch) {
-      return res.json({
-        message: "Wrong Password",
-      });
+      return res.json({ message: "Wrong Password", success: false });
     }
 
     if (isMatch) {
       const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
-      return res.status(200).json({ jwt: token });
+      return res.status(200).json({ jwt: token, success: true });
     }
-    res.json({ mes: "user not found create account" });
+    res.json({ message: "user not found create account", success: false });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      message: "Something went wrong",
-    });
+    return res.status(500).json({ message: "Something went wrong", success: false });
   }
 });
 
@@ -194,7 +188,7 @@ router.post("/signup", async (req, res) => {
     });
 
     if (findUser) {
-      res.status(409).json({ mes: "User already exists" });
+      res.status(409).json({ message: "User already exists!! try login", success: false });
       return;
     }
     const hashedPassword = await hashPassword(password);
@@ -204,12 +198,10 @@ router.post("/signup", async (req, res) => {
       email: email,
       password: hashedPassword,
     });
-    res.json({ mes: "user account created" });
+    res.json({ message: "user account created", success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      message: "Something went wrong",
-    });
+    res.status(500).json({ message: "Something went wrong", success: false });
   }
 });
 
