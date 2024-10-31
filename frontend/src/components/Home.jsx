@@ -182,7 +182,7 @@ function MainSec() {
   const [isOpenCompleteTasks, setIsOpenCompleteTasks] = useState(false);
 
   // const authToken = localStorage.getItem('authToken');
-  
+
   const [ jwtToken, setJwtToken ] = useRecoilState(jwtTokenAtom);
   const [ todos, setTodos ] = useRecoilState(todosAtom);
   // setJwtToken(authToken);
@@ -205,7 +205,7 @@ function MainSec() {
     };
 
     fetchData();
-  },[]);
+  },[jwtToken, setTodos]);
 
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
@@ -215,13 +215,21 @@ function MainSec() {
     setIsOpenCompleteTasks(!isOpenCompleteTasks);
   };
 
+   const onStatusChange = (id, newStatus) => {
+     setTodos((prevTodos) =>
+       prevTodos.map((todo) =>
+         todo.id === id ? { ...todo, status: newStatus } : todo
+       )
+     );
+   };
+
   return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
-    <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Panding Tasks {isOpenPendingTasks?"▲":"▼"}
+    <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Pending Tasks {isOpenPendingTasks?"▲":"▼"}
     </button>
 
     {isOpenPendingTasks?<div>
       {todos.map((value)=>{
-        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} onStatusChange = {onStatusChange}/> : null)
       })}
     </div>:null}
 
@@ -230,7 +238,7 @@ function MainSec() {
 
     {isOpenCompleteTasks?<div>
       {todos.map((value)=>{
-        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} onStatusChange = {onStatusChange}/> : null)
       })}
     </div>:null}
   </div>
