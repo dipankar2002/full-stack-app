@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { createTodoCard } from "../atoms/atom";
+import { createTodoCard, jwtTokenAtom, todosAtom } from "../atoms/atom";
+import axios from 'axios';
 
 const todoObj = [
   {
@@ -179,6 +180,46 @@ function MainSec() {
 
   const [isOpenPendingTasks, setIsOpenPendingTasks] = useState(true);
   const [isOpenCompleteTasks, setIsOpenCompleteTasks] = useState(false);
+
+  // const authToken = localStorage.getItem('authToken');
+  
+  const [ jwtToken, setJwtToken ] = useRecoilState(jwtTokenAtom);
+  const [ todos, setTodos ] = useRecoilState(todosAtom);
+  // setJwtToken(authToken);
+
+  // console.log(`authToken value: ${authToken}`);
+  console.log(`jwtToken value: ${jwtToken}`);
+
+  useEffect(()=>{
+    // fetch('http://localhost:3000/user/homePage', {
+    //   method: 'POST',
+    //   headers: { 
+    //     'Content-Type': 'application/json',
+    //     'authorization': `Barrer ${jwtToken}`
+    //    }
+    // }).then((data)=>{
+    //   console.log(data.json());
+      
+    //   // setTodos(data.json());
+    // })
+
+    axios.post('http://localhost:3000/user/homePage', {
+      title: 'My Post',
+      body: 'This is a post.',
+      userId: 1
+    },{
+      headers: {
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${jwtToken}`
+      },
+    }) 
+    .then(response => {
+      console.log('Data posted successfully:', response.data);
+    })
+    .catch(error => {
+      console.log('Error posting data:', error);
+    })
+  },[jwtToken]);
 
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
