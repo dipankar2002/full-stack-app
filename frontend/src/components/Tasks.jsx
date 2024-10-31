@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import { jwtTokenAtom } from "../atoms/atom";
+import { useRecoilValue } from "recoil";
 
 export default function Tasks({ title, tag, description, date, status, id, onStatusChange }) {
   return (
@@ -70,6 +72,7 @@ function DescTodo({ description, date, status, id, onStatusChange }) {
 }
 
 function StatusBtn({ status, id, onStatusChange }) {
+    const [jwtToken] = useRecoilValue(jwtTokenAtom);
   console.log(id);
   const [newStatus, setNewStatus] = useState(status);
   async function btnHandler() {

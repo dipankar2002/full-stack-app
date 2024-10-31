@@ -3,15 +3,15 @@ import { useRecoilState } from "recoil";
 import { createTodoCard, jwtTokenAtom, todosAtom } from "../atoms/atom";
 import { useState } from "react";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
 
 export default function CreateTodoCard() {
+    const [jwtToken] = useRecoilValue(jwtTokenAtom);
   const [isOpencreateTodoCard, setIsOpencreateTodoCard] =
     useRecoilState(createTodoCard);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tag, setTag] = useState("");
-    // const [todos, setTodos] = useRecoilState(todosAtom);
-
     async function btnHandler() {
 
         try {
@@ -24,15 +24,11 @@ export default function CreateTodoCard() {
                 {
                     headers : {
                         'Content-Type' : 'application/json',
-                        Authorization : `Bearer ${jwtTokenAtom}`
+                        Authorization : `Bearer ${localStorage.getItem("authToken")}`
                     },
                 }
             )
             console.log(res.data.message);
-
-            // setTodos((prevTodos) => [ ...prevTodos, res.data]);
-
-
 
             setIsOpencreateTodoCard(!isOpencreateTodoCard);
 
