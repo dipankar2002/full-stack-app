@@ -18,7 +18,7 @@ function Top({title,tag,status}) {
     return tailwindColors[Math.floor(Math.random() * tailwindColors.length)];
   }
   return <div className="flex justify-between items-center h-4 mx-auto px-2">
-    <div className={!status?`text-[100%] line-through text-white font-bold`:`text-[100%] text-white font-bold`}>{title}</div>
+    <div className={status?`text-[100%] line-through text-white font-bold`:`text-[100%] text-white font-bold`}>{title}</div>
     <div className={`${getRandomTailwindColor()} font-bold px-2 text-[80%] rounded-[6px]`}>{tag}</div>
   </div>
 }
@@ -26,7 +26,7 @@ function Top({title,tag,status}) {
 function DescTodo({description,date,status}) {
   return <div className='px-2 flex justify-between items-center'>
     <div className='w-[90%]'>
-      <p className={!status?'text-white line-through line-clamp-2':'text-white line-clamp-2'}>{description}</p>
+      <p className={status?'text-white line-through line-clamp-2':'text-white line-clamp-2'}>{description}</p>
       <div className='text-white px-2 font-medium'>{date.slice(0,10)}</div>
     </div>
     <StatusBtn status={status}/>
@@ -35,6 +35,6 @@ function DescTodo({description,date,status}) {
 
 function StatusBtn({status}) {
   return <div>
-    <button className='text-blue-300 font-bold px-3 py-1.5 border rounded-[6px]'>{(!status)?"undo":"done"}</button>
+    <button className='text-blue-300 font-bold px-3 py-1.5 border rounded-[6px]'>{(status)?"undo":"done"}</button>
   </div>
 }

@@ -95,12 +95,12 @@ router.get("/homePage", userMiddleware, async (req, res) => {
   const user = await userDb.findOne({
     email: req.email,
   });
+  // console.log(req.email);
+  
 
   if (!user) {
     return res.json({ message: "user not found. Try login again", success: false });
   }
-
-  console.log(user);
 
   return res.json(user.todo);
 });

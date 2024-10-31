@@ -40,7 +40,7 @@ export default function LogInForm() {
                 Email
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-white sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
+                className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-[10px] block w-[50%] sm:w-[200px] md:w-[300px] lg:w-[460px] xl:w-[480px] p-2.5"
                 id="password"
                 type="email"
                 value={email} onChange={(e)=>{setEmail(e.target.value)}}

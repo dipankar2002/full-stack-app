@@ -191,35 +191,21 @@ function MainSec() {
   console.log(`jwtToken value: ${jwtToken}`);
 
   useEffect(()=>{
-    // fetch('http://localhost:3000/user/homePage', {
-    //   method: 'POST',
-    //   headers: { 
-    //     'Content-Type': 'application/json',
-    //     'authorization': `Barrer ${jwtToken}`
-    //    }
-    // }).then((data)=>{
-    //   console.log(data.json());
-      
-    //   // setTodos(data.json());
-    // })
-
-    axios.post('http://localhost:3000/user/homePage', {
-      title: 'My Post',
-      body: 'This is a post.',
-      userId: 1
-    },{
-      headers: {
+    const fetchData = async () => {
+      const response = await fetch('http://localhost:3000/user/homePage', {
+        method: 'GET',
+        headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${jwtToken}`
-      },
-    }) 
-    .then(response => {
-      console.log('Data posted successfully:', response.data);
-    })
-    .catch(error => {
-      console.log('Error posting data:', error);
-    })
-  },[jwtToken]);
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      setTodos(data);
+    };
+
+    fetchData();
+  },[]);
 
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
@@ -234,8 +220,8 @@ function MainSec() {
     </button>
 
     {isOpenPendingTasks?<div>
-      {todoObj.map((value)=>{
-        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+      {todos.map((value)=>{
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
       })}
     </div>:null}
 
@@ -243,8 +229,8 @@ function MainSec() {
     </button>
 
     {isOpenCompleteTasks?<div>
-      {todoObj.map((value)=>{
-        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
+      {todos.map((value)=>{
+        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status}/> : null)
       })}
     </div>:null}
   </div>
