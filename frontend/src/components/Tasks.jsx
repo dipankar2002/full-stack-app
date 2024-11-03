@@ -33,20 +33,15 @@ function Top({ title, tag, status }) {
   }
   return (
     <div className="flex justify-between items-center h-4 mx-auto px-2">
-      <div
-        className={
-          status
-            ? `text-[100%] line-through text-white font-bold`
-            : `text-[100%] text-white font-bold`
-        }
-      >
-        {title}
+      <div className="flex items-center">
+        <div className={ status ? `text-[150%] line-through text-white` : `text-[150%] text-white`}>
+          {title}
+        </div>
+        <div className={`${getRandomTailwindColor()} font-bold px-3 text-[80%] rounded-[6px]`}>
+          {tag}
+        </div>
       </div>
-      <div
-        className={`${getRandomTailwindColor()} font-bold px-2 text-[80%] rounded-[6px]`}
-      >
-        {tag}
-      </div>
+      <button className="text-white font-bold">❌</button>
     </div>
   );
 }
@@ -72,7 +67,7 @@ function DescTodo({ description, date, status, id, onStatusChange }) {
 }
 
 function StatusBtn({ status, id, onStatusChange }) {
-    const [jwtToken] = useRecoilValue(jwtTokenAtom);
+  const jwtToken = useRecoilValue(jwtTokenAtom);
   console.log(id);
   const [newStatus, setNewStatus] = useState(status);
   async function btnHandler() {
@@ -83,7 +78,7 @@ function StatusBtn({ status, id, onStatusChange }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );

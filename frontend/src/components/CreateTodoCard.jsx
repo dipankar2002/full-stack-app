@@ -6,7 +6,7 @@ import axios from "axios";
 import { useRecoilValue } from "recoil";
 
 export default function CreateTodoCard() {
-    const [jwtToken] = useRecoilValue(jwtTokenAtom);
+  const jwtToken = useRecoilValue(jwtTokenAtom);
   const [isOpencreateTodoCard, setIsOpencreateTodoCard] =
     useRecoilState(createTodoCard);
     const [title, setTitle] = useState("");
@@ -24,7 +24,7 @@ export default function CreateTodoCard() {
                 {
                     headers : {
                         'Content-Type' : 'application/json',
-                        Authorization : `Bearer ${localStorage.getItem("authToken")}`
+                        Authorization : `Bearer ${jwtToken}`
                     },
                 }
             )
