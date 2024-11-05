@@ -13,7 +13,6 @@ export default function CreateTodoCard() {
     const [description, setDescription] = useState("");
     const [tag, setTag] = useState("");
     async function btnHandler() {
-
         try {
             const res = await axios.post("http://localhost:3000/user/createTodo",
                 {
@@ -31,7 +30,7 @@ export default function CreateTodoCard() {
             console.log(res.data.message);
 
             setIsOpencreateTodoCard(!isOpencreateTodoCard);
-
+            window.location.reload();
         } catch (error) {
            console.error(error);
         }

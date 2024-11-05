@@ -190,23 +190,6 @@ function MainSec() {
   // console.log(`authToken value: ${authToken}`);
   console.log(`jwtToken value: ${jwtToken}`);
 
-  useEffect(()=>{
-    const fetchData = async () => {
-      const response = await fetch('http://localhost:3000/user/homePage', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${jwtToken}`
-        }
-      });
-      const data = await response.json();
-      console.log(data);
-      setTodos(data);
-    };
-
-    fetchData();
-  },[jwtToken, setTodos]);
-
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
   };
