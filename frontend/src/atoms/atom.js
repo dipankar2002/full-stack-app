@@ -6,6 +6,17 @@ export const createTodoCard = atom({
   default: false
 })
 
+export const todoTagAtom = atom({
+  key: "todoTagAtom",
+  default: [
+    { tag: "None", color: "text-gray-300" },
+    { tag: "Sports", color: "text-green-300" },
+    { tag: "Education", color: "text-blue-300" },
+    { tag: "Work", color: "text-red-300" },
+    { tag: "Cooking", color: "text-orange-300" },
+  ]
+})
+
 export const jwtTokenAtom = atom({
   key: "jwtTokenAtom",
   default: localStorage.getItem('authToken')

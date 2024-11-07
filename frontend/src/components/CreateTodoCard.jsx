@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { createTodoCard, jwtTokenAtom, todosAtom } from "../atoms/atom";
+import { createTodoCard, jwtTokenAtom, todosAtom, todoTagAtom } from "../atoms/atom";
 import { useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
@@ -12,6 +12,7 @@ export default function CreateTodoCard() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tag, setTag] = useState("");
+    const todoTag = useRecoilValue(todoTagAtom);
     async function btnHandler() {
         try {
             const res = await axios.post("http://localhost:3000/user/createTodo",
@@ -56,21 +57,7 @@ export default function CreateTodoCard() {
             />
             <div className="flex justify-between items-center">
               <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-gray-800 text-white " required>
-                <option value="None">
-                  None
-                </option>
-                <option value="Sports">
-                  Sports
-                </option>
-                <option value="Education" >
-                  Education
-                </option>
-                <option value="Work" >
-                  Work
-                </option>
-                <option value="Cooking" >
-                  Cooking
-                </option>
+                {todoTag.map((val)=><option value={`${val.tag}`}>{val.tag}</option>)}
               </select>
               <button onClick={btnHandler} className="bg-blue-200 px-4 py-2 rounded-[10px] font-bold">
                 Create

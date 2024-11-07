@@ -3,7 +3,7 @@ import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { createTodoCard, jwtTokenAtom, todosAtom } from "../atoms/atom";
+import { createTodoCard, jwtTokenAtom, todosAtom, todoTagAtom } from "../atoms/atom";
 import axios from 'axios';
 
 const todoObj = [
@@ -234,7 +234,7 @@ function MainSec() {
 
     {isOpenPendingTasks?<div>
       {todos.map((value)=>{
-        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id}/> : null)
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} /> : null)
       })}
     </div>:null}
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
-import { jwtTokenAtom, todosAtom } from "../atoms/atom";
+import { jwtTokenAtom, todosAtom, todoTagAtom } from "../atoms/atom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function Tasks({ title, tag, description, date, status, id, onStatusChange }) {
@@ -19,20 +19,7 @@ export default function Tasks({ title, tag, description, date, status, id, onSta
 function Top({ title, id, tag, status }) {
   const jwtToken = useRecoilValue(jwtTokenAtom);
   const [ todos, setTodos ] = useRecoilState(todosAtom);
-  const tailwindColors = [
-    "text-red-500",
-    "text-blue-500",
-    "text-green-500",
-    "text-yellow-500",
-    "text-purple-500",
-    "text-pink-500",
-    "text-indigo-500",
-    "text-teal-500",
-    "text-orange-500",
-  ];
-  function getRandomTailwindColor() {
-    return tailwindColors[Math.floor(Math.random() * tailwindColors.length)];
-  }
+  const todoTag = useRecoilValue(todoTagAtom);
   function updatedTodo(id) {
     setTodos(
       todos.filter((val)=>{
@@ -41,8 +28,6 @@ function Top({ title, id, tag, status }) {
     )
   }
   async function deleteBtn() {
-    console.log(id);
-    console.log(jwtToken);
     try {
       const res = await axios.delete(
         `http://localhost:3000/user/deleteTodo/${id}`,
@@ -66,7 +51,7 @@ function Top({ title, id, tag, status }) {
         <div className={ status ? `text-[150%] line-through text-white` : `text-[150%] text-white`}>
           {title}
         </div>
-        <div className={`${getRandomTailwindColor()} font-bold px-3 text-[80%] rounded-[6px]`}>
+        <div className={`${todoTag.find((val)=>val.tag==tag).color} font-bold px-3 text-[80%] rounded-[6px]`}>
           {tag}
         </div>
       </div>
