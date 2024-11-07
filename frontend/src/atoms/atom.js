@@ -14,7 +14,11 @@ export const jwtTokenAtom = atom({
 
 export const todosAtom = atom({
   key: "todosAtom",
-  default: selector({
+  default: []
+})
+
+/* 
+    selector({
       key: "todosAtomSelector",
       get: async ({get})=>{
         try {
@@ -25,11 +29,11 @@ export const todosAtom = atom({
             }
           });
           const data = response.data;
-          console.log(data);
+          // console.log(data);
           return data;
         } catch (error) {
           console.error('Error:', error);
         }
       }
-  })
-})
+    })
+*/

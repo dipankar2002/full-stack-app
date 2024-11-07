@@ -162,6 +162,7 @@ function BottomBtns() {
 
 // ----------------- Right Sec part code ----------------- //
 function RightSec() {
+  
   return <div className=" w-[78%] h-[97vh] m-3 mx-auto rounded-[20px] overflow-hidden">
     <Header day={"TODAY"} account={"DG"}/>
     <MainSec />
@@ -187,8 +188,37 @@ function MainSec() {
   const [ todos, setTodos ] = useRecoilState(todosAtom);
   // setJwtToken(authToken);
 
+  useEffect(() => {
+    let isMounted = true; // A flag to check if the component is mounted
+
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:3000/user/homePage', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          }
+        });
+        const result = await response.data;
+        
+        if (isMounted) { // Only update state if the component is still mounted
+          setTodos(result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+
+    // Cleanup function to set isMounted to false when the component unmounts
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // console.log(`authToken value: ${authToken}`);
-  console.log(`jwtToken value: ${jwtToken}`);
+  // console.log(`jwtToken value: ${jwtToken}`);
 
   const toggleDropdownPendingTasks = () => {
     setIsOpenPendingTasks(!isOpenPendingTasks);
@@ -198,21 +228,13 @@ function MainSec() {
     setIsOpenCompleteTasks(!isOpenCompleteTasks);
   };
 
-   const onStatusChange = (id, newStatus) => {
-     setTodos((prevTodos) =>
-       prevTodos.map((todo) =>
-         todo.id === id ? { ...todo, status: newStatus } : todo
-       )
-     );
-   };
-
   return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
     <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Pending Tasks {isOpenPendingTasks?"▲":"▼"}
     </button>
 
     {isOpenPendingTasks?<div>
       {todos.map((value)=>{
-        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} onStatusChange = {onStatusChange}/> : null)
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id}/> : null)
       })}
     </div>:null}
 
@@ -221,7 +243,7 @@ function MainSec() {
 
     {isOpenCompleteTasks?<div>
       {todos.map((value)=>{
-        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} onStatusChange = {onStatusChange}/> : null)
+        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id}/> : null)
       })}
     </div>:null}
   </div>

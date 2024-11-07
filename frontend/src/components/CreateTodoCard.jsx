@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { createTodoCard, jwtTokenAtom, todosAtom } from "../atoms/atom";
 import { useState } from "react";
 import axios from "axios";
@@ -46,16 +46,16 @@ export default function CreateTodoCard() {
               type="name"
               placeholder="Task name"
               onChange={(e) => setTitle(e.target.value)}
-              className="focus:outline-none rounded-t-[10px] bg-transparent text-white placeholder-gray-400 text-[140%] font-medium"
+              className="focus:outline-none rounded-t-[10px] bg-transparent text-white placeholder-gray-400 text-[140%] font-medium" required
             />
             <input
               type="name"
               placeholder="Description"
               onChange={(e) => setDescription(e.target.value)}
-              className="focus:outline-none bg-transparent bg-transparent text-white placeholder-gray text-[100%]"
+              className="focus:outline-none bg-transparent bg-transparent text-white placeholder-gray text-[100%]" required
             />
             <div className="flex justify-between items-center">
-              <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-gray-800 text-white ">
+              <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-gray-800 text-white " required>
                 <option value="None">
                   None
                 </option>
