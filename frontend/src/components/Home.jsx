@@ -3,8 +3,10 @@ import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { createTodoCard, jwtTokenAtom, todosAtom, todoTagAtom } from "../atoms/atom";
+import { createTodoCard, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom } from "../atoms/atom";
 import axios from 'axios';
+import UpdateTodoCard from "./updateTodoCard";
+import NewAccAlertCard from "./NewAccAlertCard";
 
 const todoObj = [
   {
@@ -103,7 +105,9 @@ export default function Home() {
 
 // ----------------- Left Sec part code ----------------- //
 function LeftSec() {
+  const jwtToken = useRecoilValue(jwtTokenAtom);
   const isOpencreateTodoCard = useRecoilValue(createTodoCard);
+  const updateCompo = useRecoilValue(updateTodoAtom);
   return <div className="w-[15%] h-[95vh] m-3 flex flex-col justify-between">
     <div className="bg-gray-500 bg-opacity-10 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
       <Top />
@@ -111,9 +115,9 @@ function LeftSec() {
       <MidCards title={"TAGS"} innerText={{l1:"Personal",l2:"Workout",l3:"Home"}} dateTag={false}/>
     </div>
     <BottomBtns/>
-    {isOpencreateTodoCard && (
-      <CreateTodoCard/>
-    )}
+    {/* {jwtToken && <NewAccAlertCard/>} */}
+    {isOpencreateTodoCard && (<CreateTodoCard/>)}
+    {updateCompo && (<UpdateTodoCard/>)}
   </div>
 }
 
@@ -155,7 +159,8 @@ function MidInfoCard({innerText, dateTag}) {
 
 function BottomBtns() {
   return <div className="flex justify-around items-center my-2 mx-2">
-    <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Log Out</button>
+    <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black"
+        onClick={()=>{localStorage.removeItem("authToken")}}>Log Out</button>
     <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Settings</button>
   </div>
 }
@@ -182,11 +187,12 @@ function MainSec() {
   const [isOpenPendingTasks, setIsOpenPendingTasks] = useState(true);
   const [isOpenCompleteTasks, setIsOpenCompleteTasks] = useState(false);
 
-  // const authToken = localStorage.getItem('authToken');
-
   const [ jwtToken, setJwtToken ] = useRecoilState(jwtTokenAtom);
   const [ todos, setTodos ] = useRecoilState(todosAtom);
-  // setJwtToken(authToken);
+
+  const [ updateCompo, setUpdateCompo ] = useRecoilState(updateTodoAtom);
+
+  const [ currentTodoId, setCurrentTodoId ] = useRecoilState(currentTodoIdAtom);
 
   useEffect(() => {
     let isMounted = true; // A flag to check if the component is mounted
@@ -209,7 +215,7 @@ function MainSec() {
       }
     }
 
-    fetchData();
+    jwtToken?fetchData():null;
 
     // Cleanup function to set isMounted to false when the component unmounts
     return () => {
@@ -228,13 +234,19 @@ function MainSec() {
     setIsOpenCompleteTasks(!isOpenCompleteTasks);
   };
 
+  function updateTodoFunc(id) {
+    setCurrentTodoId(id);
+    // console.log(currentTodoId);
+    setUpdateCompo(!updateCompo);
+  }
+
   return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
     <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Pending Tasks {isOpenPendingTasks?"▲":"▼"}
     </button>
 
     {isOpenPendingTasks?<div>
-      {todos.map((value)=>{
-        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} /> : null)
+      {todos.slice().reverse().map((value)=>{
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} updateTodoFunc={updateTodoFunc}/> : null)
       })}
     </div>:null}
 
@@ -242,8 +254,8 @@ function MainSec() {
     </button>
 
     {isOpenCompleteTasks?<div>
-      {todos.map((value)=>{
-        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id}/> : null)
+      {todos.slice().reverse().map((value)=>{
+        return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} updateTodoFunc={updateTodoFunc}/> : null)
       })}
     </div>:null}
   </div>

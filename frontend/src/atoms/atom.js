@@ -6,6 +6,16 @@ export const createTodoCard = atom({
   default: false
 })
 
+export const updateTodoAtom = atom({
+  key: "updateTodoAtom",
+  default: false
+})
+
+export const currentTodoIdAtom = atom({
+  key: "currentTodoIdAtom",
+  default: "",
+})
+
 export const todoTagAtom = atom({
   key: "todoTagAtom",
   default: [

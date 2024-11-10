@@ -56,8 +56,8 @@ export default function CreateTodoCard() {
               className="focus:outline-none bg-transparent bg-transparent text-white placeholder-gray text-[100%]" required
             />
             <div className="flex justify-between items-center">
-              <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-gray-800 text-white " required>
-                {todoTag.map((val)=><option value={`${val.tag}`}>{val.tag}</option>)}
+              <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-black text-white " required>
+                {todoTag.map((val,index)=><option key={index} value={`${val.tag}`}>{val.tag}</option>)}
               </select>
               <button onClick={btnHandler} className="bg-blue-200 px-4 py-2 rounded-[10px] font-bold">
                 Create
