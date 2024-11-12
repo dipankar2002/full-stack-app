@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
-import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { createTodoCard, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom } from "../atoms/atom";
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { createTodoCard, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom } from "../atoms/atom";
 import axios from 'axios';
 import UpdateTodoCard from "./updateTodoCard";
 import NewAccAlertCard from "./NewAccAlertCard";
@@ -108,11 +108,15 @@ function LeftSec() {
   const jwtToken = useRecoilValue(jwtTokenAtom);
   const isOpencreateTodoCard = useRecoilValue(createTodoCard);
   const updateCompo = useRecoilValue(updateTodoAtom);
+  const todos = useRecoilValue(todosAtom);
+  const tagsList = [...new Set(todos.map((value)=>value.tag))];
+  
+
   return <div className="w-[15%] h-[95vh] m-3 flex flex-col justify-between">
     <div className="bg-gray-500 bg-opacity-10 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
       <Top />
-      <MidCards title={"TASKS"} innerText={{l1:"Today",l2:"Upcoming",l3:"Calender"}} dateTag={true}/>
-      <MidCards title={"TAGS"} innerText={{l1:"Personal",l2:"Workout",l3:"Home"}} dateTag={false}/>
+      <MidCards title={"TASKS"} innerText={["Today","Upcoming","Calender"]} dateTag={true}/>
+      <MidTagCards title={"TAGS"} innerText={tagsList} dateTag={false}/>
     </div>
     <BottomBtns/>
     {/* {jwtToken && <NewAccAlertCard/>} */}
@@ -141,19 +145,41 @@ function MidCards({title, innerText, dateTag}) {
 }
 
 function MidInfoCard({innerText, dateTag}) {
+  const setCurrentTag = useSetRecoilState(currentTagAtom);
   return <div className="bg-white rounded-[20px] py-2 my-2">
-    <div className="flex justify-between w-[80%] mx-auto my-2">
-      <button className="text-[120%] font-medium">&#8658; {innerText.l1}</button>
-    </div>
-    <div className="flex justify-between w-[80%] mx-auto my-2">
-      <button className="text-[120%] font-medium">&#8658; {innerText.l2}</button>
-    </div>
-    <div className="flex justify-between items-center w-[80%] mx-auto my-2">
-      <button className="text-[120%] font-medium">&#8658; {innerText.l3}</button>
+    {innerText.map((value,index)=>{
+      return (<div key={index} className="flex justify-between items-center w-[80%] mx-auto my-2">
+      <button className="text-[120%] font-medium" onClick={()=>{}}>&#8658; {value}</button>
       {dateTag?<input className=" cursor-pointer w-[20px]"
         type="date"
         placeholder=""/>:null}
-    </div>
+      </div>)
+    })}
+  </div>
+}
+
+function MidTagCards({title, innerText, dateTag}) {
+  return <div className=" my-4 w-[95%] mx-auto">
+    <p className="ml-4 text-[120%] text-white font-bold">{title}</p>
+    <MidTagInfoCard innerText={innerText} dateTag={dateTag}/>
+  </div>
+}
+
+function MidTagInfoCard({innerText, dateTag}) {
+  const setCurrentTag = useSetRecoilState(currentTagAtom);
+  return <div className="bg-white rounded-[20px] py-2 my-2">
+    {innerText.map((value,index)=>{
+      return (<div key={index} className="flex justify-between items-center w-[80%] mx-auto my-2">
+      <button className="text-[120%] font-medium" onClick={()=>{setCurrentTag((prev)=>{
+        if(prev==null) return value
+        else if(prev!=value) return value
+        return null;
+      })}}>&#8658; {value}</button>
+      {dateTag?<input className=" cursor-pointer w-[20px]"
+        type="date"
+        placeholder=""/>:null}
+      </div>)
+    })}
   </div>
 }
 
@@ -193,6 +219,8 @@ function MainSec() {
   const [ updateCompo, setUpdateCompo ] = useRecoilState(updateTodoAtom);
 
   const [ currentTodoId, setCurrentTodoId ] = useRecoilState(currentTodoIdAtom);
+
+  const currentTag = useRecoilValue(currentTagAtom);
 
   useEffect(() => {
     let isMounted = true; // A flag to check if the component is mounted
@@ -245,16 +273,32 @@ function MainSec() {
     </button>
 
     {isOpenPendingTasks?<div>
-      {todos.slice().reverse().map((value)=>{
+      {todos.slice().reverse().filter((value)=>{
+        if(currentTag!==null) {
+          return value.tag==currentTag;
+        }
+        return value;
+      }).map((value)=>{
         return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} updateTodoFunc={updateTodoFunc}/> : null)
       })}
     </div>:null}
+
+    {/* {isOpenPendingTasks?<div>
+      {todos.slice().reverse().map((value)=>{
+        return (!value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} updateTodoFunc={updateTodoFunc}/> : null)
+      })}
+    </div>:null} */}
 
     <button onClick={toggleDropdownCompleteTasks} className="w-[90%] mx-auto my-5 text-[150%] font-medium text-white flex">Completed Tasks {isOpenCompleteTasks?"▲":"▼"}
     </button>
 
     {isOpenCompleteTasks?<div>
-      {todos.slice().reverse().map((value)=>{
+      {todos.slice().reverse().filter((value)=>{
+        if(currentTag!==null) {
+          return value.tag==currentTag;
+        }
+        return value;
+      }).map((value)=>{
         return (value.status? <Tasks key={value.id} title={value.title} description={value.description} tag={value.tag} date={value.date} status={value.status} id={value.id} updateTodoFunc={updateTodoFunc}/> : null)
       })}
     </div>:null}

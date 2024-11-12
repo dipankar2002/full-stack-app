@@ -1,6 +1,11 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
 
+export const currentShowDate = atom({
+  key: "currentShowDate",
+  default: "",
+})
+
 export const createTodoCard = atom({
   key: "createTodoCard",
   default: false
@@ -25,6 +30,11 @@ export const todoTagAtom = atom({
     { tag: "Work", color: "text-red-300" },
     { tag: "Cooking", color: "text-orange-300" },
   ]
+})
+
+export const currentTagAtom = atom({
+  key: "currentTagAtom",
+  default: null
 })
 
 export const jwtTokenAtom = atom({

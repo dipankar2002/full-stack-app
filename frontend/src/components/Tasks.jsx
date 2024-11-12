@@ -38,7 +38,6 @@ function Top({ title, id, tag, status, updateTodoFunc }) {
           },
         }
       );
-      console.log(res.data.message);
       updatedTodo(id);
       // window.location.reload();
     } catch (error) {
@@ -110,7 +109,6 @@ function StatusBtn({ status, id }) {
           },
         }
       );
-      console.log(res.data.message);
       const updatedStatus = !newStatus;
       setNewStatus(updatedStatus);
       onStatusChange(id, updatedStatus);
