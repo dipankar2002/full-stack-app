@@ -3,7 +3,7 @@ import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { createTodoCard, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom } from "../atoms/atom";
+import { createTodoCard, currentShowTodoAtom, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom, userNameAtom } from "../atoms/atom";
 import axios from 'axios';
 import UpdateTodoCard from "./updateTodoCard";
 import NewAccAlertCard from "./NewAccAlertCard";
@@ -193,9 +193,10 @@ function BottomBtns() {
 
 // ----------------- Right Sec part code ----------------- //
 function RightSec() {
-  
+  const userName = useRecoilValue(userNameAtom);
+  const currentShowTodo = useRecoilValue(currentShowTodoAtom);
   return <div className=" w-[78%] h-[97vh] m-3 mx-auto rounded-[20px] overflow-hidden">
-    <Header day={"TODAY"} account={"DG"}/>
+    <Header day={currentShowTodo} account={userName.slice(0,1)}/>
     <MainSec />
     <CreateTodoBtn/>
   </div>
@@ -204,7 +205,7 @@ function RightSec() {
 function Header({day,account}) {
   return <div className="flex justify-between items-center mx-auto mt-0 mb-4 w-[90%]">
     <p className="text-white font-bold text-[200%] tracking-widest ">{day}</p>
-    <div className="bg-white w-[60px] h-[60px] flex justify-center items-center text-[200%] font-bold rounded-[50%]">{account}</div>
+    <div className="bg-white w-[60px] h-[60px] flex justify-center items-center  font-bold rounded-[50%]"><p className="text-[200%] mb-[3px]">{account}</p></div>
   </div>
 }
 

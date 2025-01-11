@@ -22,7 +22,7 @@ export default function LogInForm() {
     if(data.success) {
       const token = data.jwt;
       localStorage.setItem('authToken', token);
-      navigate("/");
+      navigate("/home");
     } else {
       setMessage(data.message);
     }

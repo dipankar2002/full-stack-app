@@ -1,9 +1,19 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
 
+export const userNameAtom = atom({
+  key: "userNameAtom",
+  default: "Dipankar"
+})
+
 export const currentShowDate = atom({
   key: "currentShowDate",
   default: "",
+})
+
+export const currentShowTodoAtom = atom({
+  key: "currentShowTodoAtom",
+  default: "All Todos",
 })
 
 export const createTodoCard = atom({
