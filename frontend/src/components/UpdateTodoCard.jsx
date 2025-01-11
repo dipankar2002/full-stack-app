@@ -52,7 +52,7 @@ export default function UpdateTodoCard() {
           placeholder={`title`}
           onChange={(e) => setTitle(e.target.value)} 
           className="focus:outline-none rounded-t-[10px] bg-transparent text-white placeholder-gray-400 text-[140%] font-medium" required/>
-        <input type="name" placeholder="Description" onChange={(e) => setDescription(e.target.value)} className="focus:outline-none bg-transparent bg-transparent text-white placeholder-gray text-[100%]" required/>
+        <input type="name" placeholder="Description" onChange={(e) => setDescription(e.target.value)} className="focus:outline-none bg-transparent text-white placeholder-gray text-[100%]" required/>
         <div className="flex justify-between items-center">
           <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-black text-white " required>
             {todoTag.map((val,index)=><option key={index} value={`${val.tag}`}>{val.tag}</option>)}
