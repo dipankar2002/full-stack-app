@@ -1,6 +1,16 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
 
+export const darkModeAtom = atom({
+  key: "darkModeAtom",
+  default: true
+})
+
+export const menuBarAtom = atom({
+  key: "menuBarAtom",
+  default: false
+})
+
 export const userNameAtom = atom({
   key: "userNameAtom",
   default: "Dipankar"

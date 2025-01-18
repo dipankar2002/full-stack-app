@@ -40,9 +40,8 @@ export default function CreateTodoCard() {
   return (
     <>
       {isOpencreateTodoCard && (
-        <div className="absolute w-[98%] h-[96%]">
-          <div className="absolute inset-0 -m-4 blur-2xl bg-white opacity-20 -z-10 rounded-lg"></div>
-          <div className="w-[30%] bg-neutral-900 grid mx-auto mt-[7%] p-5 rounded-[10px] shadow-xl">
+        <div className="absolute w-[98%] z-25">
+          <div className="w-[30%] bg-neutral-900 grid mx-auto mt-20 p-5 rounded-[10px] shadow-[50%]">
             <input
               type="name"
               placeholder="Task name"
@@ -53,7 +52,7 @@ export default function CreateTodoCard() {
               type="name"
               placeholder="Description"
               onChange={(e) => setDescription(e.target.value)}
-              className="focus:outline-none bg-transparent bg-transparent text-white placeholder-gray text-[100%]" required
+              className="focus:outline-none bg-transparent text-white placeholder-gray text-[100%]" required
             />
             <div className="flex justify-between items-center">
               <select onChange={(e) => setTag(e.target.value)} className="px-3 py-1 bg-black text-white " required>

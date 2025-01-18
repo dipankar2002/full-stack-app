@@ -3,98 +3,15 @@ import { useState } from "react";
 import Tasks from "./Tasks";
 import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { createTodoCard, currentShowTodoAtom, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, todosAtom, todoTagAtom, updateTodoAtom, userNameAtom } from "../atoms/atom";
+import { createTodoCard, currentShowTodoAtom, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, menuBarAtom, todosAtom, todoTagAtom, updateTodoAtom, userNameAtom } from "../atoms/atom";
 import axios from 'axios';
 import UpdateTodoCard from "./updateTodoCard";
 import NewAccAlertCard from "./NewAccAlertCard";
 
-const todoObj = [
-  {
-      id: 1,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: false,
-      date: "2024-10-27T10:08:14.700Z",
-      _id: "671e110eda81d41630be5846"
-  },
-  {
-      id: 2,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: false,
-      date: "2024-10-27T10:08:16.397Z",
-      _id: "671e1110da81d41630be584a"
-  },
-  {
-      id: 3,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: true,
-      date: "2024-10-27T10:08:17.304Z",
-      _id: "671e1111da81d41630be584f"
-  },
-  {
-      id: 4,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: false,
-      date: "2024-10-27T10:08:18.163Z",
-      _id: "671e1112da81d41630be5855"
-  },
-  {
-      id: 5,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: true,
-      date: "2024-10-27T10:08:19.039Z",
-      _id: "671e1113da81d41630be585c"
-  },
-  {
-      id: 6,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: false,
-      date: "2024-10-27T10:08:19.802Z",
-      _id: "671e1113da81d41630be5864"
-  },
-  {
-      id: 7,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: true,
-      date: "2024-10-27T10:08:20.672Z",
-      _id: "671e1114da81d41630be586d"
-  },
-  {
-      id: 8,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: false,
-      date: "2024-10-27T10:08:21.482Z",
-      _id: "671e1115da81d41630be5877"
-  },
-  {
-      id: 9,
-      tag: "project",
-      title: "full stack todo",
-      description: "comple code for the project",
-      status: true,
-      date: "2024-10-27T10:08:22.273Z",
-      _id: "671e1116da81d41630be5882"
-  }
-]
 
 export default function Home() {
   return (
-    <div className="flex">
+    <div className=" grid grid-cols-[100%] lg:grid-cols-[20%_75%] justify-center  ">
       <RecoilRoot>
         <LeftSec />
         <RightSec />
@@ -110,12 +27,13 @@ function LeftSec() {
   const updateCompo = useRecoilValue(updateTodoAtom);
   const todos = useRecoilValue(todosAtom);
   const tagsList = [...new Set(todos.map((value)=>value.tag))];
+  const menuOpen = useRecoilValue(menuBarAtom);
   
 
-  return <div className="w-[15%] h-[95vh] m-3 flex flex-col justify-between">
-    <div className="bg-gray-500 bg-opacity-10 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto">
+  return <div className={`${menuOpen?"Block absolute bg-black bg-opacity-100":"hidden"} lg:block w-[100%] h-[95vh] my-3 mr-4 z-30`}>
+    <div className={`bg-gray-500 bg-opacity-30 rounded-[20px] py-1 px-1 hide-scrollbar overflow-auto`}>
       <Top />
-      <MidCards title={"TASKS"} innerText={["Today","Upcoming","Calender"]} dateTag={true}/>
+      {/* <MidCards title={"TASKS"} innerText={["Today","Upcoming","Calender"]} dateTag={true}/> */}
       <MidTagCards title={"TAGS"} innerText={tagsList} dateTag={false}/>
     </div>
     <BottomBtns/>
@@ -126,14 +44,12 @@ function LeftSec() {
 }
 
 function Top() {
+  const [ menuOpen, setMenuOpen ] = useRecoilState(menuBarAtom);
   return <div className="grid">
     <div className="flex justify-between items-center w-[90%] mx-auto">
       <h2 className="text-white font-bold text-2xl tracking-widest">MENU</h2>
-      <button className="text-white font-bold text-[200%] tracking-widest">=</button>
+      <button className="lg:hidden  text-white font-bold text-[200%] tracking-widest" onClick={()=>{setMenuOpen(!menuOpen)}}>=</button>
     </div>
-    <input className="bg-white bg-opacity-50 rounded-[20px] mb-4 px-5 pb-1.3 w-[90%] h-[35px] mx-auto text-white placeholder-black text-[120%] font-medium"
-      type="text"
-      placeholder="SEARCH"/>
   </div>
 }
 
@@ -186,7 +102,10 @@ function MidTagInfoCard({innerText, dateTag}) {
 function BottomBtns() {
   return <div className="flex justify-around items-center my-2 mx-2">
     <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black"
-        onClick={()=>{localStorage.removeItem("authToken")}}>Log Out</button>
+        onClick={()=>{
+          localStorage.removeItem("authToken")
+          window.location.replace('http://localhost:5000/login');
+        }}>Log Out</button>
     <button className="bg-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-[10px] text-[80%] px-4 py-2 focus:ring-blue-800 text-black">Settings</button>
   </div>
 }
@@ -195,7 +114,7 @@ function BottomBtns() {
 function RightSec() {
   const userName = useRecoilValue(userNameAtom);
   const currentShowTodo = useRecoilValue(currentShowTodoAtom);
-  return <div className=" w-[78%] h-[97vh] m-3 mx-auto rounded-[20px] overflow-hidden">
+  return <div className="w-[100%]  my-3 ml-4 mx-auto rounded-[20px] overflow-hidden">
     <Header day={currentShowTodo} account={userName.slice(0,1)}/>
     <MainSec />
     <CreateTodoBtn/>
@@ -203,8 +122,12 @@ function RightSec() {
 }
 
 function Header({day,account}) {
+  const [ menuOpen, setMenuOpen ] = useRecoilState(menuBarAtom);
   return <div className="flex justify-between items-center mx-auto mt-0 mb-4 w-[90%]">
-    <p className="text-white font-bold text-[200%] tracking-widest ">{day}</p>
+    <div className="flex items-center">
+      <button className="lg:hidden text-white font-bold text-[250%] tracking-widest mr-2" onClick={()=>{setMenuOpen(!menuOpen)}}>=</button>
+      <p className="text-white font-bold text-[200%] tracking-widest ">{day}</p>
+    </div>
     <div className="bg-white w-[60px] h-[60px] flex justify-center items-center  font-bold rounded-[50%]"><p className="text-[200%] mb-[3px]">{account}</p></div>
   </div>
 }
@@ -269,7 +192,7 @@ function MainSec() {
     setUpdateCompo(!updateCompo);
   }
 
-  return <div className="bg-gray-500 bg-opacity-10 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
+  return <div className="bg-gray-500 bg-opacity-30 rounded-[20px] h-[100%] pt-2 pb-20 hide-scrollbar overflow-auto">
     <button onClick={toggleDropdownPendingTasks} className="w-[90%] mx-auto text-[150%] font-medium text-white flex">Pending Tasks {isOpenPendingTasks?"▲":"▼"}
     </button>
 
@@ -310,5 +233,5 @@ function CreateTodoBtn() {
   const [ isOpencreateTodoCard, setIsOpencreateTodoCard ] = useRecoilState(createTodoCard);
   return <button onClick={()=>{
     setIsOpencreateTodoCard(!isOpencreateTodoCard);
-  }} className="fixed bottom-10 right-20 flex bg-blue-400 px-6 pb-2 mx-auto rounded-[15px] text-[190%] font-bold z-20">{!isOpencreateTodoCard?"create":"close"}</button>
+  }} className="fixed bottom-10 right-10 lg:right-14 flex bg-blue-400 px-6 pb-2 mx-auto rounded-[15px] text-[190%] font-bold z-29">{!isOpencreateTodoCard?"create":"close"}</button>
 }
