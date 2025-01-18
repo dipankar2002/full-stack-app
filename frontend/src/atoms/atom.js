@@ -1,9 +1,44 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
 
+export const darkModeAtom = atom({
+  key: "darkModeAtom",
+  default: true
+})
+
+export const menuBarAtom = atom({
+  key: "menuBarAtom",
+  default: false
+})
+
+export const userNameAtom = atom({
+  key: "userNameAtom",
+  default: "Dipankar"
+})
+
+export const currentShowDate = atom({
+  key: "currentShowDate",
+  default: "",
+})
+
+export const currentShowTodoAtom = atom({
+  key: "currentShowTodoAtom",
+  default: "All Todos",
+})
+
 export const createTodoCard = atom({
   key: "createTodoCard",
   default: false
+})
+
+export const updateTodoAtom = atom({
+  key: "updateTodoAtom",
+  default: false
+})
+
+export const currentTodoIdAtom = atom({
+  key: "currentTodoIdAtom",
+  default: "",
 })
 
 export const todoTagAtom = atom({
@@ -15,6 +50,11 @@ export const todoTagAtom = atom({
     { tag: "Work", color: "text-red-300" },
     { tag: "Cooking", color: "text-orange-300" },
   ]
+})
+
+export const currentTagAtom = atom({
+  key: "currentTagAtom",
+  default: null
 })
 
 export const jwtTokenAtom = atom({

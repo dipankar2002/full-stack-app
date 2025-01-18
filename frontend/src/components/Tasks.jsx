@@ -4,19 +4,19 @@ import axios from "axios";
 import { jwtTokenAtom, todosAtom, todoTagAtom } from "../atoms/atom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-export default function Tasks({ title, tag, description, date, status, id, onStatusChange }) {
+export default function Tasks({ title, tag, description, date, status, id, updateTodoFunc }) {
   return (
     <div
       id="dropdown"
       className="border-b border-b-gray-100 w-[60%] mx-auto my-2 py-2 px-3"
     >
-      <Top title={title} id={id} tag={tag} status={status} />
+      <Top title={title} id={id} tag={tag} status={status} updateTodoFunc={updateTodoFunc}/>
       <DescTodo description={description} date={date} status={status} id={id}/>
     </div>
   );
 }
 
-function Top({ title, id, tag, status }) {
+function Top({ title, id, tag, status, updateTodoFunc }) {
   const jwtToken = useRecoilValue(jwtTokenAtom);
   const [ todos, setTodos ] = useRecoilState(todosAtom);
   const todoTag = useRecoilValue(todoTagAtom);
@@ -38,12 +38,14 @@ function Top({ title, id, tag, status }) {
           },
         }
       );
-      console.log(res.data.message);
       updatedTodo(id);
       // window.location.reload();
     } catch (error) {
       console.error(error);
     }
+  }
+  function editBtn() {
+    updateTodoFunc(id);
   }
   return (
     <div className="flex justify-between items-center h-4 mx-auto px-2">
@@ -55,7 +57,10 @@ function Top({ title, id, tag, status }) {
           {tag}
         </div>
       </div>
-      <button onClick={deleteBtn} className="text-white font-bold">❌</button>
+      <div className="w-[9%] flex justify-between">
+        <button onClick={editBtn} className="text-white font-small">✎edit</button>
+        <button onClick={deleteBtn} className="text-white font-bold">❌</button>
+      </div>
     </div>
   );
 }
@@ -104,7 +109,6 @@ function StatusBtn({ status, id }) {
           },
         }
       );
-      console.log(res.data.message);
       const updatedStatus = !newStatus;
       setNewStatus(updatedStatus);
       onStatusChange(id, updatedStatus);
