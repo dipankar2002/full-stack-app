@@ -5,7 +5,7 @@ import CreateTodoCard from "./CreateTodoCard";
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { createTodoCard, currentShowTodoAtom, currentTagAtom, currentTodoIdAtom, jwtTokenAtom, menuBarAtom, todosAtom, todoTagAtom, updateTodoAtom, userNameAtom } from "../atoms/atom";
 import axios from 'axios';
-import UpdateTodoCard from "./updateTodoCard";
+import UpdateTodoCard from "./UpdateTodoCard";
 import NewAccAlertCard from "./NewAccAlertCard";
 
 
