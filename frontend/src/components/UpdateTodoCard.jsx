@@ -23,7 +23,7 @@ export default function UpdateTodoCard() {
   }
   async function updateBtn() {
     try {
-      const res = await axios.put(`http://localhost:3000/user/updateTodo/${currentTodoId}`,
+      const res = await axios.put(`https://todo-app-rd60.onrender.com/user/updateTodo/${currentTodoId}`,
           {
               tag : tag,
               title : title,

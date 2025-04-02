@@ -15,7 +15,7 @@ export default function CreateTodoCard() {
     const todoTag = useRecoilValue(todoTagAtom);
     async function btnHandler() {
         try {
-            const res = await axios.post("http://localhost:3000/user/createTodo",
+            const res = await axios.post("https://todo-app-rd60.onrender.com/user/createTodo",
                 {
                     tag : tag,
                     title : title,

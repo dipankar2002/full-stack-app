@@ -11,7 +11,7 @@ export default function SignUpForm ()  {
 
   async function signupBtn(e) {
     e.preventDefault();
-    const response = await fetch('http://localhost:3000/user/signup', {
+    const response = await fetch('https://todo-app-rd60.onrender.com/user/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

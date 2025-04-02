@@ -30,7 +30,7 @@ function Top({ title, id, tag, status, updateTodoFunc }) {
   async function deleteBtn() {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/user/deleteTodo/${id}`,
+        `https://todo-app-rd60.onrender.com/user/deleteTodo/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -100,7 +100,7 @@ function StatusBtn({ status, id }) {
   async function btnHandler() {
     try {
       const res = await axios.put(
-        `http://localhost:3000/user/changeStatus/${id}`,
+        `https://todo-app-rd60.onrender.com/user/changeStatus/${id}`,
         {},
         {
           headers: {

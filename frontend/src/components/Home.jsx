@@ -151,7 +151,7 @@ function MainSec() {
 
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:3000/user/homePage', {
+        const response = await axios.get('https://todo-app-rd60.onrender.com/user/homePage', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${jwtToken}`
